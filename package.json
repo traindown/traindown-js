@@ -1,0 +1,43 @@
+{
+  "name": "traindown",
+  "version": "0.0.1",
+  "description": "A language to help athletes express their training. Inspired by Markdown.",
+  "homepage": "https://traindown.com",
+  "source": "src/index.js",
+  "main": "dist/index.js",
+  "exports": "dist/index.modern.js",
+  "module": "dist/index.module.js",
+  "unpkg": "dist/index.umd.js",
+  "scripts": {
+    "build": "microbundle",
+    "dev": "microbundle watch",
+    "test": "npm run build && jest --clearCache && jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/traindown/traindown-js.git"
+  },
+  "keywords": [
+    "training",
+    "trainer",
+    "trainee",
+    "exercise",
+    "fitness",
+    "fitness-tracker"
+  ],
+  "author": "Tyler Scott",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/traindown/traindown-js/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/types": "^7.12.12",
+    "jest": "^26.6.3",
+    "microbundle": "^0.13.0"
+  }
+}
