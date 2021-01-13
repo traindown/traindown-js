@@ -1,4 +1,5 @@
 import {Lexer} from "./lexer";
+import {PresenterJSON} from "./presenter_json";
 import {TokenType} from "./token_type";
 
 class Parser {
@@ -7,9 +8,26 @@ class Parser {
     this.lexer = new Lexer(srcString, this.idleState);
   }
 
-  parse() {
+  parse(presenterType) {
     this.lexer.run(this);
-    return this.lexer.tokens;
+
+    if (!presenterType) {
+      return this.lexer.tokens;
+    }
+
+    switch(presenterType) {
+      case "json":
+        json = new PresenterJSON(this.lexer.tokens);
+
+        if (!json.done || json.errors.length > 0) {
+          // TODO: Wire up.
+          return { error: true }
+        }
+
+        return json.output;
+      default:
+        return this.lexer.tokens;
+    }
   }
 
   idleState(lexer) {

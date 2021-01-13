@@ -1,15 +1,15 @@
 const traindown = require('../dist/index.js');
 
-test('Basic parsing', () => {
-  const src = `
-    Squats 123: 123.45 100.5r
-      '30 second pullup: bw+25 50r
-      '2/3 Squat: 500
-      + 1/4 Turds:
-        * Hard af
-        # Bands: 2 red, 2 blue
-        123 100r 5s`;
+const src = `
+  Squats 123: 123.45 100.5r
+  '30 second pullup: bw+25 50r
+  '2/3 Squat: 500
+  + 1/4 Turds:
+    * Hard af
+    # Bands: 2 red, 2 blue
+    123 100r 5s`;
 
+test('Basic parsing', () => {
   let td = new traindown(src);
   let tokens = td.parse();
 
@@ -32,4 +32,14 @@ test('Basic parsing', () => {
   ];
 
   expect(tokens).toEqual(expected);
+});
+
+test('Parsing with JSON output', () => {
+  let td = new traindown(src);
+  let json = td.parse("json");
+
+  console.log(json);
+
+  console.log(json.movements[3].metadata);
+  console.log(json.movements[3].notes);
 });
