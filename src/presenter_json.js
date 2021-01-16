@@ -79,6 +79,7 @@ export class PresenterJSON {
       performances: [],
       sequence: this.output.movements.length,
       superset: false,
+      touched: false
     };
 
     let currentMetaKey = null;
@@ -93,29 +94,36 @@ export class PresenterJSON {
             movement.superset = true;
             movement.name = token.value;
             break;
+
           case TokenType.MovementToken:
             movement.name = token.value;
             break;
+
           case TokenType.MetaKeyToken:
             movement.metadata[token.value] = null;
             currentMetaKey = token.value;
             break;
+
           case TokenType.MetaValueToken:
             movement.metadata[currentMetaKey] = token.value;
             break;
+
           case TokenType.NoteToken:
             movement.notes.push(token.value);
             break;
+
           default:
             performanceIndex = i;
             break movementLoop;
         }
+        movement.touched = true;
       }
 
-    movement.performances = this._marshalPerformance(movementTokens.slice(performanceIndex))
-
-    this.output.movements.push(movement);
-    return;
+    if (movement.touched) {
+      delete movement.touched;
+      movement.performances = this._marshalPerformance(movementTokens.slice(performanceIndex));
+      this.output.movements.push(movement);
+    }
   }
 
   _marshalPerformance(performanceTokens) {
@@ -136,34 +144,71 @@ export class PresenterJSON {
     let inLoad = false;
     let performance = newPerformance();
 
+    let pushPerformance = (p) => {
+      delete performance.touched;
+      performance.sequence = performances.length;
+      performances.push(performance);
+      performance = newPerformance();
+    }
+
     for (let i = 0; i < performanceTokens.length; ++i) {
       let token = performanceTokens[i];
 
       if (token.type == TokenType.LoadToken) {
         if (performance.touched) {
-          performances.push(performance);
-          performance = newPerformance();
+          if (performance.reps == 0 && performance.fails == 0) {
+            performance.reps = 1;
+          }
+
+          if (performance.load != 0) {
+            pushPerformance(performance);
+          }
         } 
 
-        performance.load = token.value;
+        maybeLoad = parseFloat(token.value);
+        performance.load = (isNaN(maybeLoad)) ?
+          token.value :
+          maybeLoad;
       } else {
         switch(token.type) {
           case TokenType.FailToken:
-            performance.fails = token.value;
+            performance.fails = parseFloat(token.value);
+            break;
+
           case TokenType.MetaKeyToken:
             performance.metadata[token.value] = null;
             currentMetaKey = token.value;
+            break;
+
           case TokenType.MetaValueToken:
             performance.metadata[currentMetaKey] = token.value;
+            break;
+
           case TokenType.NoteToken:
             performance.notes.push(token.value);
+            break;
+
           case TokenType.RepToken:
-            performance.reps = token.value;
+            performance.reps = parseFloat(token.value);
+            break;
+
           case TokenType.SetToken:
-            performance.sets = token.value;
+            performance.sets = parseInt(token.value, 10);
+            break;
         }
       }
+      performance.touched = true;
     }
+
+    if (performance.reps == 0 && performance.fails == 0) {
+      performance.reps = 1;
+    }
+
+    if (performance.fails > 0 && performance.reps == 0) {
+      performance.reps = performance.fails;
+    }
+
+    pushPerformance(performance);
 
     return performances;
   }

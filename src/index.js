@@ -37,8 +37,10 @@ class Parser {
       return null;
     }
 
-    if (this._isWhitespace(chr)) {
-      return this.whitespaceState(lexer);
+    if (this._isWhitespace(chr) || this._isLineTerminator(chr)) {
+      lexer.next();
+      lexer.ignore();
+      return this.idleState(lexer);
     }
 
     switch(chr) {
@@ -207,28 +209,6 @@ class Parser {
     }
 
     return this.numberState(lexer);
-  }
-
-  whitespaceState(lexer) {
-    chr = lexer.next();
-
-    if (chr == TokenType.EOF) {
-      return null;
-    }
-
-    if (!this._isWhitespace(chr)) {
-      lexer.error("Unexpected token " + chr);
-      return null;
-    }
-
-    while(this._isWhitespace(chr)) {
-      chr = lexer.next();
-    }
-
-    lexer.rewind();
-    lexer.ignore();
-
-    return this.idleState;
   }
 
   _isLineTerminator(chr) {
