@@ -17,7 +17,7 @@ class Parser {
 
     switch(presenterType) {
       case "json":
-        json = new PresenterJSON(this.lexer.tokens);
+        let json = new PresenterJSON(this.lexer.tokens);
 
         if (!json.done || json.errors.length > 0) {
           // TODO: Wire up.
@@ -31,7 +31,7 @@ class Parser {
   }
 
   idleState(lexer) {
-    chr = lexer.peek();
+    let chr = lexer.peek();
 
     if (chr == TokenType.EOF) {
       return null;
@@ -59,7 +59,7 @@ class Parser {
     lexer.take(["@", " "]);
     lexer.ignore();
 
-    chr = lexer.next();
+    let chr = lexer.next();
 
     while(!this._isLineTerminator(chr)) {
       chr = lexer.next();
@@ -75,7 +75,7 @@ class Parser {
     lexer.take(["#", " "]);
     lexer.ignore();
 
-    chr = lexer.next();
+    let chr = lexer.next();
 
     while(chr != ":") {
       chr = lexer.next();
@@ -91,7 +91,7 @@ class Parser {
     lexer.take([":", " "]);
     lexer.ignore();
 
-    chr = lexer.next();
+    let chr = lexer.next();
 
     while(!this._isLineTerminator(chr)) {
       chr = lexer.next();
@@ -104,9 +104,9 @@ class Parser {
   }
 
   movementState(lexer) {
-    superset = false;
+    let superset = false;
 
-    chr = lexer.next();
+    let chr = lexer.next();
 
     if (chr == "+") {
       superset = true
@@ -142,7 +142,7 @@ class Parser {
     lexer.take(["*", " "]);
     lexer.ignore();
 
-    chr = lexer.next();
+    let chr = lexer.next();
 
     while(!this._isLineTerminator(chr)) {
       chr = lexer.next();
@@ -178,7 +178,7 @@ class Parser {
   }
 
   valueState(lexer) {
-    chr = lexer.next();
+    let chr = lexer.next();
 
     if (chr == "+" || chr == "'") {
       lexer.rewind();
@@ -191,7 +191,7 @@ class Parser {
         return this.movementState(lexer);
       }
 
-      p = lexer.peek();
+      let p = lexer.peek();
 
       if (p != "w" && p != "W") {
         lexer.rewind();

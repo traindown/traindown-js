@@ -22,7 +22,8 @@ export class Lexer {
   }
 
   emit(tokenType) {
-    token = new Token(tokenType, this.current());
+    let token = new Token(tokenType, this.current());
+
     this.tokens.push(token)
     this.start = this.position;
     this.vcr.clear();
@@ -38,8 +39,8 @@ export class Lexer {
   }
 
   next() {
-    chr = TokenType.EOF
-    str = this.src.slice(this.position, this.src.length);
+    let chr = TokenType.EOF
+    let str = this.src.slice(this.position, this.src.length);
 
     if (str.length != 0) {
       chr = str[0];
@@ -56,14 +57,14 @@ export class Lexer {
   }
 
   peek() {
-    chr = this.next();
+    let chr = this.next();
     this.rewind();
 
     return chr;
   }
 
   rewind() {
-    chr = this.vcr.pop()
+    let chr = this.vcr.pop()
 
     if (chr != TokenType.EOF) {
       this.position -= 1;
@@ -83,7 +84,7 @@ export class Lexer {
   }
 
   take(chrArray) {
-    chr = this.next();
+    let chr = this.next();
 
     while(chrArray.includes(chr)) {
       chr = this.next();

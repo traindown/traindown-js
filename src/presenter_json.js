@@ -165,7 +165,7 @@ export class PresenterJSON {
           }
         } 
 
-        maybeLoad = parseFloat(token.value);
+        let maybeLoad = parseFloat(token.value);
         performance.load = (isNaN(maybeLoad)) ?
           token.value :
           maybeLoad;

@@ -14,7 +14,7 @@ export class VCR {
   }
 
   push(chr) {
-    next = new Tape(chr);
+    let next = new Tape(chr);
     
     if (this.start == null) {
       this.start = next;
@@ -29,7 +29,7 @@ export class VCR {
       return TokenType.EOF;
     }
 
-    next = this.start;
+    let next = this.start;
     this.start = next.next;
 
     return next.chr;
