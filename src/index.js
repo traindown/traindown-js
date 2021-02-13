@@ -77,7 +77,7 @@ class Parser {
 
     let chr = lexer.next();
 
-    while(chr != ":") {
+    while(!this._isColonTerminator(chr)) {
       chr = lexer.next();
     }
 
@@ -120,7 +120,7 @@ class Parser {
       chr = lexer.next();
     }
 
-    while(chr != ":") {
+    while(!this._isColonTerminator(chr)) {
       chr = lexer.next();
     }
 
@@ -211,20 +211,16 @@ class Parser {
     return this.numberState(lexer);
   }
 
-  _isLineTerminator(chr) {
-    if (chr == TokenType.EOF || chr == ";" || chr == "\n" || chr == "\r") {
-      return true;
-    }
+  _isColonTerminator(chr) {
+    return chr == TokenType.EOF || chr == ":";
+  }
 
-    return false;
+  _isLineTerminator(chr) {
+    return chr == TokenType.EOF || chr == ";" || chr == "\n" || chr == "\r";
   }
 
   _isWhitespace(chr) {
-    if (/\s/.test(chr)) {
-      return true;
-    }
-
-    return false;
+    return /\s/.test(chr);
   }
 }
 

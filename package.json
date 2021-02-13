@@ -1,6 +1,6 @@
 {
   "name": "traindown",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A language to help athletes express their training. Inspired by Markdown.",
   "homepage": "https://traindown.com",
   "source": "src/index.js",

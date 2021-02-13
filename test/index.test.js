@@ -223,3 +223,14 @@ test('Parsing with JSON output', () => {
 
   expect(json).toEqual(expected);
 });
+
+const incompleteMovement = `
+ @ 1/1/2021 1:23pm
+
+  movement 1`;
+
+test('Incomplete movement', () => {
+  let td = new traindown(incompleteMovement);
+  let tokens = td.parse();
+
+});
